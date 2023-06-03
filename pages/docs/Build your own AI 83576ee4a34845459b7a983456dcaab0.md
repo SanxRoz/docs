@@ -1,7 +1,5 @@
 # Build your own AI
 
-Published: Yes
-Slug: build-your-AI
 
 ![https://cdn.discordapp.com/attachments/1082815363722522726/1086106919544029244/Just_Ask_ME.png](https://cdn.discordapp.com/attachments/1082815363722522726/1086106919544029244/Just_Ask_ME.png)
 
