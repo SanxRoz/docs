@@ -115,12 +115,16 @@ export default async function handler(req: NextRequest) {
       contextText += `${content.trim()}\n---\n`
     }
 
+    console.log(contextText)
+
     const prompt = codeBlock`
       ${oneLine`
         You are a very enthusiastic Supabase representative who loves
         to help people! Given the following sections from the Supabase
         documentation, answer the question using only that information,
-        outputted in markdown format. If you are unsure and the answer
+        outputted in markdown format.
+        Pls include the context sections on the answer
+        If you are unsure and the answer
         is not explicitly written in the documentation, say
         "Sorry, I don't know how to help with that."
       `}
