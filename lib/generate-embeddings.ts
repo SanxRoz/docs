@@ -17,7 +17,6 @@ import { u } from 'unist-builder'
 import { filter } from 'unist-util-filter'
 import { inspect } from 'util'
 import yargs from 'yargs'
-import pdfParse from 'pdf-parse'
 
 dotenv.config()
 
@@ -263,35 +262,7 @@ class MarkdownEmbeddingSource extends BaseEmbeddingSource {
   }
 }
 
-type EmbeddingSource = MarkdownEmbeddingSource | PDFEmbeddingSource
-
-class PDFEmbeddingSource extends BaseEmbeddingSource {
-  type: 'pdf' = 'pdf'
-
-  constructor(source: string, public filePath: string, public parentFilePath?: string) {
-    const path = filePath.replace(/^pages/, '').replace(/\.pdf$/, '')
-    const parentPath = parentFilePath?.replace(/^pages/, '').replace(/\.pdf$/, '')
-
-    super(source, path, parentPath)
-  }
-
-  async load() {
-    const dataBuffer = await readFile(this.filePath)
-    const data = await pdfParse(dataBuffer)
-
-    const { checksum, meta, sections } = processMdxForSearch(data.text)
-
-    this.checksum = checksum
-    this.meta = meta
-    this.sections = sections
-
-    return {
-      checksum,
-      meta,
-      sections,
-    }
-  }
-}
+type EmbeddingSource = MarkdownEmbeddingSource
 
 async function generateEmbeddings() {
   const argv = await yargs.option('refresh', {
@@ -325,16 +296,9 @@ async function generateEmbeddings() {
 
   const embeddingSources: EmbeddingSource[] = [
     ...(await walk('pages'))
-      .filter(({ path }) => /\.mdx?$|\.pdf$/.test(path))
+      .filter(({ path }) => /\.mdx?$/.test(path))
       .filter(({ path }) => !ignoredFiles.includes(path))
-      .reduce((acc: EmbeddingSource[], entry) => {
-        if (/\.mdx?$/.test(entry.path)) {
-          acc.push(new MarkdownEmbeddingSource('guide', entry.path))
-        } else if (/\.pdf$/.test(entry.path)) {
-          acc.push(new PDFEmbeddingSource('guide', entry.path))
-        }
-        return acc
-      }, []),
+      .map((entry) => new MarkdownEmbeddingSource('guide', entry.path)),
   ]
 
   console.log(`Discovered ${embeddingSources.length} pages`)
