@@ -123,7 +123,6 @@ export default async function handler(req: NextRequest) {
         to help people! Given the following sections from the Supabase
         documentation, answer the question using only that information,
         outputted in markdown format.
-        Pls include the context sections on the answer
         If you are unsure and the answer
         is not explicitly written in the documentation, say
         "Sorry, I don't know how to help with that."
