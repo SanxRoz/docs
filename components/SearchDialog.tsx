@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
+import ReactMarkdown from 'react-markdown'
 import {
   Dialog,
   DialogContent,
@@ -191,7 +192,7 @@ export function SearchDialog() {
           </DialogHeader>
 
           <form onSubmit={handleSubmit}>
-            <div className="grid gap-4 py-4 text-slate-700">
+            <div className="flex flex-col flex-nowrap grid gap-4 py-4 text-slate-700">
               {question && (
                 <div className="flex gap-4">
                   <span className="bg-slate-100 dark:bg-slate-300 p-2 w-8 h-8 rounded-full text-center flex items-center justify-center">
@@ -225,7 +226,7 @@ export function SearchDialog() {
                   <span className="bg-[#4d7c0f] p-2 w-8 h-8 rounded-full text-center flex items-center justify-center">
                     <Wand2 width={18} className="text-white" />
                   </span>
-                  {answer}
+                  <div>{answer}</div>
                 </div>
               ) : null}
 
